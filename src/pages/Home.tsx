@@ -1,5 +1,6 @@
 import BookCard from '@/components/BookCard';
 import { useGetBooksQuery } from '@/redux/features/books/bookApi';
+import { IBook } from '@/types/globalTypes';
 import { Link } from 'react-router-dom';
 
 const Home = () => {
@@ -24,7 +25,7 @@ const Home = () => {
         </div>
       </div>
       <div className="px-8">
-        {data?.data.map((book) => (
+        {data?.data.map((book: IBook) => (
           <BookCard book={book} />
         ))}
       </div>
