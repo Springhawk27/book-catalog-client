@@ -1,8 +1,11 @@
 import BookCard from '@/components/BookCard';
-import React from 'react';
+import { useGetBooksQuery } from '@/redux/features/books/bookApi';
 import { Link } from 'react-router-dom';
 
 const Home = () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { data, isLoading, error } = useGetBooksQuery(undefined);
+  console.log(data?.data);
   return (
     <div>
       <div className="hero min-h-screen bg-base-200">
@@ -21,9 +24,9 @@ const Home = () => {
         </div>
       </div>
       <div className="px-8">
-        <BookCard></BookCard>
-        <BookCard></BookCard>
-        <BookCard></BookCard>
+        {data?.data.map((book) => (
+          <BookCard book={book} />
+        ))}
       </div>
     </div>
   );
