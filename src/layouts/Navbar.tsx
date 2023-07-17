@@ -1,6 +1,19 @@
+import { auth } from '@/lib/firebase';
+import { setUser } from '@/redux/features/user/userSlice';
+import { useAppDispatch, useAppSelector } from '@/redux/hook';
+import { signOut } from 'firebase/auth';
 import { Link } from 'react-router-dom';
 
 const Navbar = () => {
+  const { user } = useAppSelector((state) => state.user);
+  const dispatch = useAppDispatch();
+  const handleLogout = () => {
+    console.log('loggedout');
+    signOut(auth).then(() => {
+      dispatch(setUser(null));
+    });
+  };
+
   return (
     <div className="navbar bg-red-100 ">
       <div className="flex-1">
@@ -31,15 +44,21 @@ const Navbar = () => {
                 <li>
                   <a>Reading List</a>
                 </li>
-                <li>
-                  <Link to="/signup">Signup</Link>
-                </li>
-                <li>
-                  <Link to="/login">Login</Link>
-                </li>
-                <li>
-                  <a>Logout</a>
-                </li>
+                {!user.email && (
+                  <>
+                    <li>
+                      <Link to="/signup">Signup</Link>
+                    </li>
+                    <li>
+                      <Link to="/login">Login</Link>
+                    </li>
+                  </>
+                )}
+                {user.email && (
+                  <li onClick={handleLogout}>
+                    <a>Logout</a>
+                  </li>
+                )}
               </ul>
             </details>
           </li>
