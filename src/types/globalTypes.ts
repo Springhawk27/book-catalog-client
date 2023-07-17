@@ -1,8 +1,8 @@
 export interface IBook {
-  _id: number;
+  _id?: number;
   title: string;
   author: string;
   genre: string;
   publicationDate: number;
-  reviews: string[];
+  reviews?: string[];
 }
