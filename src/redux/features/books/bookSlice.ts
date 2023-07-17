@@ -14,6 +14,7 @@ const bookSlice = createSlice({
   initialState,
   reducers: {
     setGenre: (state, action: PayloadAction<string>) => {
+      console.log(action.payload);
       state.genre = action.payload;
     },
     setPublicationDate: (state, action: PayloadAction<number>) => {
@@ -21,5 +22,7 @@ const bookSlice = createSlice({
     },
   },
 });
+
+export const { setGenre, setPublicationDate } = bookSlice.actions;
 
 export default bookSlice.reducer;
