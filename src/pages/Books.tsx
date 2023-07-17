@@ -89,7 +89,7 @@ const Books = () => {
       </div>
       <div className="grid sm:col-span-9 col-span-12  md:grid-cols-3 sm:grid-cols-2 grid-cols gap-10 pb-20">
         {booksData?.map((book: IBook) => (
-          <BookCard book={book} />
+          <BookCard key={book?._id} book={book} />
         ))}
       </div>
     </div>
