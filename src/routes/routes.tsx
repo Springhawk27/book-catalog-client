@@ -1,4 +1,5 @@
 import App from '@/App';
+import Books from '@/pages/Books';
 import Home from '@/pages/Home';
 import NotFound from '@/pages/NotFound';
 import { createBrowserRouter } from 'react-router-dom';
@@ -11,6 +12,10 @@ const routes = createBrowserRouter([
       {
         index: true,
         element: <Home />,
+      },
+      {
+        path: '/books',
+        element: <Books />,
       },
     ],
   },

@@ -5,10 +5,12 @@ const Navbar = () => {
     <div className="navbar bg-red-100">
       <div className="flex-1">
         <div className="font-extrabold pl-2">
-          <span className="text-purple-600">Book</span>
-          {''}
-          <span className="text-yellow-500">~Worm</span>
-        </div>{' '}
+          <Link to="/">
+            <span className="text-purple-600">Book</span>
+            {''}
+            <span className="text-yellow-500">~Worm</span>
+          </Link>
+        </div>
       </div>
 
       <div className="flex-none">
