@@ -24,7 +24,7 @@ const Home = () => {
           </div>
         </div>
       </div>
-      <div className="px-8">
+      <div className="px-8 grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4 ">
         {data?.data.map((book: IBook) => (
           <BookCard book={book} />
         ))}
