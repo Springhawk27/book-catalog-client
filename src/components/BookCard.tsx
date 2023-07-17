@@ -1,10 +1,12 @@
 import { IBook } from '@/types/globalTypes';
+import { Link } from 'react-router-dom';
 
 interface IProps {
   book: IBook;
 }
 
 const BookCard = ({ book }: IProps) => {
+  // console.log(book);
   return (
     <div className="card w-auto bg-base-100 shadow-xl">
       <div className="card-body items-center text-center">
@@ -13,7 +15,9 @@ const BookCard = ({ book }: IProps) => {
         <p>Genre: {book.genre}</p>
         <p>Publication Date: {book.publicationDate}</p>
         <div className="card-actions">
-          <button className="btn btn-primary">Details</button>
+          <Link to={`/book-detail/${book?._id}`} className="btn btn-primary">
+            Details
+          </Link>
         </div>
       </div>
     </div>
