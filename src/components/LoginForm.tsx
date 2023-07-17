@@ -1,6 +1,8 @@
 import { loginUser } from '@/redux/features/user/userSlice';
-import { useAppDispatch } from '@/redux/hook';
+import { useAppDispatch, useAppSelector } from '@/redux/hook';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 interface LoginFormInputs {
   email: string;
@@ -14,12 +16,27 @@ const LoginForm = () => {
     formState: { errors },
   } = useForm<LoginFormInputs>();
 
+  const { user, isLoading } = useAppSelector((state) => state.user);
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const location = useLocation();
 
   const onSubmit = (data: LoginFormInputs) => {
     // console.log(data);
     dispatch(loginUser({ email: data.email, password: data.password }));
   };
+
+  useEffect(() => {
+    if (user.email && !isLoading) {
+      const { state } = location;
+      if (state && state.path) {
+        navigate(state.path);
+      } else {
+        navigate('/');
+      }
+    }
+  }, [user.email, isLoading, location, navigate]);
+
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}

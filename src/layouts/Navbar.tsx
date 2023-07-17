@@ -8,7 +8,7 @@ const Navbar = () => {
   const { user } = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
   const handleLogout = () => {
-    console.log('loggedout');
+    // console.log('loggedout');
     signOut(auth).then(() => {
       dispatch(setUser(null));
     });
@@ -30,6 +30,9 @@ const Navbar = () => {
         <ul className="menu menu-horizontal px-1">
           <li>
             <Link to="/books">Books</Link>
+          </li>
+          <li>
+            <Link to="/addbook">Add New Book</Link>
           </li>
           <li>
             <details className="dropdown dropdown-end">
