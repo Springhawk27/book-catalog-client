@@ -55,7 +55,7 @@ const Books = () => {
                     dispatch(setGenre(''));
                   }}
                   key={genre}
-                  className="cursor-pointer"
+                  className="cursor-pointer hover:bg-base-200"
                 >
                   All
                 </li>
@@ -65,7 +65,7 @@ const Books = () => {
                       dispatch(setGenre(genre));
                     }}
                     key={genre}
-                    className="cursor-pointer"
+                    className="cursor-pointer hover:bg-base-200"
                   >
                     {genre}
                   </li>
