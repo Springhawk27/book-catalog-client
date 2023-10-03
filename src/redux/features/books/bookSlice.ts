@@ -3,12 +3,15 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 interface IBook {
   genre: string | null;
   publicationDate: number | null;
+  searchQuery: string;
 }
 
 const initialState: IBook = {
   genre: null,
   publicationDate: 2030,
+  searchQuery: '',
 };
+
 const bookSlice = createSlice({
   name: 'book',
   initialState,
@@ -20,9 +23,13 @@ const bookSlice = createSlice({
     setPublicationDate: (state, action: PayloadAction<number>) => {
       state.publicationDate = action.payload;
     },
+    setSearchQuery: (state, action: PayloadAction<string>) => {
+      state.searchQuery = action.payload;
+    },
   },
 });
 
-export const { setGenre, setPublicationDate } = bookSlice.actions;
+export const { setGenre, setPublicationDate, setSearchQuery } =
+  bookSlice.actions;
 
 export default bookSlice.reducer;

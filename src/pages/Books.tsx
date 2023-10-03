@@ -1,14 +1,19 @@
 import BookCard from '@/components/BookCard';
 import { useGetAllBooksQuery } from '@/redux/features/books/bookApi';
-import { setGenre, setPublicationDate } from '@/redux/features/books/bookSlice';
+import {
+  setGenre,
+  setPublicationDate,
+  setSearchQuery,
+} from '@/redux/features/books/bookSlice';
 import { useAppDispatch, useAppSelector } from '@/redux/hook';
 import { IBook } from '@/types/globalTypes';
-import { useState } from 'react';
 
 const Books = () => {
   const { data, isLoading, error } = useGetAllBooksQuery(undefined);
 
-  const { genre, publicationDate } = useAppSelector((state) => state.book);
+  const { genre, publicationDate, searchQuery } = useAppSelector(
+    (state) => state.book
+  );
   const dispatch = useAppDispatch();
 
   const genres = new Set<string>(data?.data.map((book: IBook) => book?.genre));
@@ -18,15 +23,25 @@ const Books = () => {
     dispatch(setPublicationDate(value));
   };
 
-  let booksData;
+  // search
+  // const [searchQuery, setSearchQuery] = useState<string>('');
+
+  const handleSearchInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    dispatch(setSearchQuery(event.target.value));
+  };
+
+  // let booksData;
+  let booksData = data?.data;
 
   if (genre) {
-    booksData = data?.data?.filter(
+    booksData = booksData?.filter(
       (item: { genre: string; publicationDate: number }) =>
         item.genre === genre && item.publicationDate < publicationDate!
     );
   } else if (publicationDate! > 1800) {
-    booksData = data?.data?.filter(
+    booksData = booksData?.filter(
       (item: { publicationDate: number }) =>
         item.publicationDate < publicationDate!
     );
@@ -34,17 +49,8 @@ const Books = () => {
     booksData = data?.data;
   }
 
-  // search
-  const [searchQuery, setSearchQuery] = useState<string>('');
-
-  const handleSearchInputChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setSearchQuery(event.target.value);
-  };
-
   if (searchQuery.trim() !== '') {
-    booksData = booksData.filter(
+    booksData = booksData?.filter(
       (book: IBook) =>
         book.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         book.genre.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -99,8 +105,8 @@ const Books = () => {
               <input
                 type="range"
                 min={1900}
-                max={2023}
-                defaultValue={2023}
+                max={2030}
+                defaultValue={2030}
                 onChange={(event) => handleSlider(Number(event.target.value))}
                 className="range range-warning"
               />
