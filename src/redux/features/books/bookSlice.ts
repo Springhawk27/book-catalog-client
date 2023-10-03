@@ -7,7 +7,7 @@ interface IBook {
 
 const initialState: IBook = {
   genre: null,
-  publicationDate: 2023,
+  publicationDate: 2030,
 };
 const bookSlice = createSlice({
   name: 'book',

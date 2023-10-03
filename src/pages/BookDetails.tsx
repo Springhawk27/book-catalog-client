@@ -1,3 +1,4 @@
+import BookReview from '@/components/BookReview';
 import { useSingleBookQuery } from '@/redux/features/books/bookApi';
 import { useParams } from 'react-router-dom';
 
@@ -23,6 +24,7 @@ export default function BookDetails() {
           <button className="btn btn-outline btn-accent ms-2">Delete</button>
         </div>
       </div>
+      <BookReview id={id!}></BookReview>
     </>
   );
 }
