@@ -34,65 +34,99 @@ const Books = () => {
     booksData = data?.data;
   }
 
-  return (
-    <div className="grid grid-cols-12 max-w-7xl mx-auto relative ">
-      <div className="sm:col-span-3 col-span-12 z md:mr-10 mr-0  space-y-5 border rounded-2xl border-gray-200/80 p-5 self-start sticky bg-white top-16 md:h-[calc(100vh-80px)] h-20vh">
-        <div>
-          <h1 className="text-2xl uppercase">Filter By:</h1>
+  // search
+  const [searchQuery, setSearchQuery] = useState<string>('');
 
-          <p className="text-purple-400">{genre}</p>
-          <div className="flex items-center space-x-2 mt-3">
-            <div className="dropdown dropdown-hover">
-              <label tabIndex={0} className="btn m-1 bg-purple-200">
-                Genre
-              </label>
-              <ul
-                tabIndex={0}
-                className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
-              >
-                <li
-                  onClick={() => {
-                    dispatch(setGenre(''));
-                  }}
-                  key={genre}
-                  className="cursor-pointer hover:bg-base-200"
+  const handleSearchInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setSearchQuery(event.target.value);
+  };
+
+  if (searchQuery.trim() !== '') {
+    booksData = booksData.filter(
+      (book: IBook) =>
+        book.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        book.genre.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        book.author.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  }
+
+  return (
+    <div>
+      <div className="grid grid-cols-12 max-w-7xl mx-auto relative ">
+        <div className="sm:col-span-3 col-span-12 z md:mr-10 mr-0  space-y-5 border rounded-2xl border-gray-200/80 p-5 self-start sticky bg-white top-16 md:h-[calc(100vh-80px)] h-20vh">
+          <div>
+            <h1 className="text-2xl uppercase">Filter By:</h1>
+
+            <p className="text-purple-400">{genre}</p>
+            <div className="flex items-center space-x-2 mt-3">
+              <div className="dropdown dropdown-hover">
+                <label tabIndex={0} className="btn m-1 bg-purple-200">
+                  Genre
+                </label>
+                <ul
+                  tabIndex={0}
+                  className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
                 >
-                  All
-                </li>
-                {Array.from(genres).map((genre: string) => (
                   <li
                     onClick={() => {
-                      dispatch(setGenre(genre));
+                      dispatch(setGenre(''));
                     }}
                     key={genre}
                     className="cursor-pointer hover:bg-base-200"
                   >
-                    {genre}
+                    All
                   </li>
-                ))}
-              </ul>
+                  {Array.from(genres).map((genre: string) => (
+                    <li
+                      onClick={() => {
+                        dispatch(setGenre(genre));
+                      }}
+                      key={genre}
+                      className="cursor-pointer hover:bg-base-200"
+                    >
+                      {genre}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           </div>
-        </div>
-        <div className="space-y-3 ">
-          <h1 className="text-2xl uppercase">Filter By Year</h1>
-          <div className="max-w-xl">
-            <input
-              type="range"
-              min={1900}
-              max={2023}
-              defaultValue={2023}
-              onChange={(event) => handleSlider(Number(event.target.value))}
-              className="range range-warning"
-            />
+          <div className="space-y-3 ">
+            <h1 className="text-2xl uppercase">Filter By Year</h1>
+            <div className="max-w-xl">
+              <input
+                type="range"
+                min={1900}
+                max={2023}
+                defaultValue={2023}
+                onChange={(event) => handleSlider(Number(event.target.value))}
+                className="range range-warning"
+              />
+            </div>
+            <div>From 1900 To {publicationDate}</div>
           </div>
-          <div>From 1900 To {publicationDate}</div>
         </div>
-      </div>
-      <div className="grid sm:col-span-9 col-span-12  md:grid-cols-3 sm:grid-cols-2 grid-cols gap-10 pb-20">
-        {booksData?.map((book: IBook) => (
-          <BookCard key={book?._id} book={book} />
-        ))}
+        <div className="grid sm:col-span-9 col-span-12  pb-20">
+          <div>
+            {' '}
+            <div className="col-span-3 w-full py-4">
+              <input
+                type="text"
+                placeholder="Search books"
+                className="input input-bordered input-warning w-full"
+                value={searchQuery}
+                onChange={handleSearchInputChange}
+              />
+            </div>
+          </div>
+          <div className=" grid md:grid-cols-3 sm:grid-cols-2 grid-cols gap-10 pb-20">
+            {booksData?.map((book: IBook) => (
+              <BookCard key={book?._id} book={book} />
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );
