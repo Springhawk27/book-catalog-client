@@ -17,14 +17,14 @@ const AddBook = () => {
     formState: { errors },
   } = useForm<IAddBook>();
 
-  //   const dispatch = useAppDispatch();
-  const [postComment] = usePostBookMutation();
+  const [postBook] = usePostBookMutation();
 
-  // Define a state variable to control toast visibility
   const [showToast, setShowToast] = useState(false);
 
+  const [message, setMessage] = useState<string | null>(null);
+  const [messageCode, setMessageCode] = useState<number | null>(null);
+
   const onSubmit = async (data: IAddBook) => {
-    // console.log(data);
     const options: IBook = {
       title: data.title,
       author: data.author,
@@ -32,45 +32,56 @@ const AddBook = () => {
       publicationDate: Number(data.publicationDate),
     };
 
-    // console.log(options);
-    // postComment(options);
-
     try {
-      // Call the API to create the book
-      await postComment(options);
-      // If the API call is successful, show the toast
-      setShowToast(true);
-      // Set a timer to hide the toast after 3 seconds
-      setTimeout(() => {
-        setShowToast(false);
-      }, 3000); // 3000 milliseconds (3 seconds)
+      const response = await postBook(options);
+      if ('error' in response) {
+        setMessage('Failed to create the book. Please try again.');
+        setShowToast(true);
+        setMessageCode(0);
+      } else {
+        setMessage('Book created successfully.');
+        setShowToast(true);
+        setMessageCode(1);
+      }
     } catch (error) {
-      // Handle errors here if needed
+      setMessage('An error occurred. Please try again.');
+      setShowToast(true);
+      setMessageCode(0);
     }
   };
 
-  // Use useEffect to automatically hide the toast after 3 seconds
   useEffect(() => {
+    console.log('showToast:', showToast);
     if (showToast) {
       const timer = setTimeout(() => {
         setShowToast(false);
-      }, 3000); // 3000 milliseconds (3 seconds)
+      }, 3000);
 
-      // Clear the timer if the component unmounts or showToast becomes false before the timer completes
       return () => clearTimeout(timer);
     }
   }, [showToast]);
 
   return (
     <>
-      {/* Toast message */}
-      {showToast && (
-        <div className="toast toast-top toast-center">
-          <div className="alert alert-success">
-            <span>Book created successfully.</span>
+      {showToast && messageCode === 1 && (
+        <div
+          className={`toast toast-top toast-center bg-success rounded-md mt-4`}
+        >
+          <div className={`alert alert-success`}>
+            <span>{message}</span>
           </div>
         </div>
       )}
+      {showToast && messageCode === 0 && (
+        <div
+          className={`toast toast-top toast-center bg-error rounded-md mt-4 text-white`}
+        >
+          <div className={`alert alert-error`}>
+            <span>{message}</span>
+          </div>
+        </div>
+      )}
+
       <div className="px-12 md:py-24 py-12 flex flex-col  justify-center items-center ">
         <div className=" md:w-2/5 w-full">
           <h3 className="flex justify-start underline">Add a new book</h3>
@@ -90,7 +101,7 @@ const AddBook = () => {
               autoComplete="title"
               autoCorrect="off"
               {...register('title', { required: 'Title is required' })}
-              className="input input-bordered w-full max-w-xs"
+              className="input input-bordered w-full max-w-xs "
             />
             {errors.title && <p>{errors.title.message}</p>}
             <label className="label">
