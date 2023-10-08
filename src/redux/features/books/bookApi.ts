@@ -24,27 +24,19 @@ const bookApi = api.injectEndpoints({
         body: data,
       }),
     }),
+    // postReview: builder.mutation({
+    //   query: ({ id, reviewData }) => ({
+    //     url: `/books/${id}`,
+    //     method: 'PATCH',
+    //     body: reviewData,
+    //   }),
+    // }),
     postBook: builder.mutation({
       query: (data) => ({
         url: `/books`,
         method: 'POST',
         body: data,
       }),
-    }),
-    postReview: builder.mutation({
-      query: ({ id, review }) => ({
-        url: `/review/${id}`,
-        method: 'POST',
-        body: review,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }),
-      // invalidatesTags: ['reviews'],
-    }),
-    getReview: builder.query({
-      query: (id) => ({ url: `/review/${id}` }),
-      // providesTags: ['reviews'],
     }),
   }),
 });
@@ -54,8 +46,7 @@ export const {
   useGetBooksQuery,
   usePostBookMutation,
   useSingleBookQuery,
-  usePostReviewMutation,
-  useGetReviewQuery,
+  // usePostReviewMutation,
   useDeleteBookMutation,
   useUpdateBookMutation,
 } = bookApi;

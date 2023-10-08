@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 const Home = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { data, isLoading, error } = useGetBooksQuery(undefined);
+  const { data } = useGetBooksQuery(undefined);
   console.log(data?.data);
   return (
     <div>

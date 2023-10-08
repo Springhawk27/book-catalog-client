@@ -17,11 +17,7 @@ interface IUpdateBook {
 const UpdateBook = () => {
   const { id } = useParams();
 
-  const {
-    data: book,
-    isLoading,
-    error: bookQueryError,
-  } = useSingleBookQuery(id);
+  const { data: book } = useSingleBookQuery(id);
 
   const {
     register,

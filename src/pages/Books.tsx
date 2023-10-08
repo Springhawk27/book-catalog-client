@@ -9,7 +9,7 @@ import { useAppDispatch, useAppSelector } from '@/redux/hook';
 import { IBook } from '@/types/globalTypes';
 
 const Books = () => {
-  const { data, isLoading, error } = useGetAllBooksQuery(undefined);
+  const { data } = useGetAllBooksQuery(undefined);
 
   const { genre, publicationDate, searchQuery } = useAppSelector(
     (state) => state.book
