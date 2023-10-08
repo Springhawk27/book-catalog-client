@@ -5,4 +5,5 @@ export interface IBook {
   genre: string;
   publicationDate: number;
   reviews?: string[];
+  finishedReading?: boolean;
 }
