@@ -51,7 +51,7 @@ export default function BookDetails() {
 
   const onSubmit = async (data: IUpdateBook) => {
     const options: Partial<IBook> = {
-      reviews: [...book.data.reviews, data.review],
+      reviews: [...book.data.reviews.map(String), data.review],
     };
 
     try {
@@ -64,7 +64,9 @@ export default function BookDetails() {
         setMessage('Review added successfully.');
         setShowToast(true);
         setMessageCode(1);
+
         navigate(`/book-detail/${id}`);
+        window.location.reload();
       }
     } catch (error) {
       setMessage('An error occurred. Please try again.');
@@ -105,7 +107,7 @@ export default function BookDetails() {
           </div>
         </div>
       )}
-      <div className="flex flex-col max-w-7xl mx-auto items-center justify-center md:py-24 py-12">
+      <div className="flex flex-col max-w-7xl mx-auto items-center justify-center md:py-12 py-8">
         <div className="w-[50%] space-y-3">
           <h1 className="text-3xl font-semibold">{book?.data?.title}</h1>
           <p className="text-xl">By {book?.data?.author}</p>
@@ -126,16 +128,13 @@ export default function BookDetails() {
           </button>
         </div>
         {/* Review */}
-        <div>
-          <h2>Review</h2>
-          <p>{book?.data?.reviews.join('\n')}</p>
-        </div>
+
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="form-control w-full max-w-xs"
+          className="form-control w-full max-w-sm py-8"
         >
           <label className="label">
-            <span className="label-text">Add Review</span>
+            <span className="label-text text-base">Add Review</span>
           </label>
           <input
             id="review"
@@ -144,15 +143,38 @@ export default function BookDetails() {
             autoCapitalize="none"
             autoCorrect="off"
             {...register('review', { required: 'Review is required' })}
-            value={updatedReview}
+            // value={updatedReview}
             onChange={(e) => setUpdatedReview(e.target.value)}
-            className="input input-bordered w-full max-w-xs"
+            className="input input-bordered w-full max-w-sm"
           />
           {errors.review && <p>{errors.review.message}</p>}
           <button className="btn btn-outline btn-secondary mt-4">
             Submit Review
           </button>
         </form>
+        {/* review list */}
+        {/* <div className="p-4">
+          <p>{book?.data?.reviews.join('\n')}</p>
+        </div> */}
+      </div>
+      <div className="px-8">
+        <div className="py-4">
+          <h2 className="text-2xl font-semibold">Reviews</h2>
+        </div>
+        <div className="p-4">
+          <ul className="list-none">
+            {book?.data?.reviews.map(
+              (review: string, index: string | number) => (
+                <li
+                  key={index}
+                  className="text-lg mt-2 bg-yellow-50 px-2 py-4 rounded"
+                >
+                  {review}
+                </li>
+              )
+            )}
+          </ul>
+        </div>
       </div>
     </>
   );
