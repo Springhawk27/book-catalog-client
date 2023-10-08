@@ -1,3 +1,6 @@
+import { addToReadingList } from '@/redux/features/books/readingListSlice';
+import { addToWishlist } from '@/redux/features/books/wishListSlice';
+import { useAppDispatch } from '@/redux/hook';
 import { IBook } from '@/types/globalTypes';
 import { Link } from 'react-router-dom';
 
@@ -7,6 +10,17 @@ interface IProps {
 
 const BookCard = ({ book }: IProps) => {
   // console.log(book);
+
+  const dispatch = useAppDispatch();
+
+  const handleAddToWishlist = () => {
+    dispatch(addToWishlist(book));
+  };
+
+  const handleAddToReadingList = () => {
+    dispatch(addToReadingList(book));
+  };
+
   return (
     <div className="card w-auto bg-base-100 shadow-xl">
       <div className="card-body items-center text-center">
@@ -18,6 +32,15 @@ const BookCard = ({ book }: IProps) => {
           <Link to={`/book-detail/${book?._id}`} className="btn btn-primary">
             Details
           </Link>
+          <button onClick={handleAddToWishlist} className="btn btn-secondary">
+            Add to Wishlist
+          </button>
+          <button
+            onClick={handleAddToReadingList}
+            className="btn btn-secondary"
+          >
+            Add to Reading List
+          </button>
         </div>
       </div>
     </div>
