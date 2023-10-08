@@ -3,6 +3,8 @@ import { addToWishlist } from '@/redux/features/books/wishListSlice';
 import { useAppDispatch } from '@/redux/hook';
 import { IBook } from '@/types/globalTypes';
 import { Link } from 'react-router-dom';
+import { Toaster, toast } from 'react-hot-toast';
+import { useState } from 'react';
 
 interface IProps {
   book: IBook;
@@ -12,13 +14,19 @@ const BookCard = ({ book }: IProps) => {
   // console.log(book);
 
   const dispatch = useAppDispatch();
+  const [toastMessage, setToastMessage] = useState('Added to Wish List');
+  const [toastMessage2, setToastMessage2] = useState('Added to Reading List');
 
   const handleAddToWishlist = () => {
     dispatch(addToWishlist(book));
+    setToastMessage('Added to Wish List');
+    toast.success(toastMessage);
   };
 
   const handleAddToReadingList = () => {
     dispatch(addToReadingList(book));
+    setToastMessage2('Added to Reading List');
+    toast.success(toastMessage2);
   };
 
   return (
@@ -28,21 +36,27 @@ const BookCard = ({ book }: IProps) => {
         <p>by {book.author}</p>
         <p>Genre: {book.genre}</p>
         <p>Publication Date: {book.publicationDate}</p>
-        <div className="card-actions">
+        <div className="card-actions flex flex-col justify-center items-center space-y-2">
           <Link to={`/book-detail/${book?._id}`} className="btn btn-primary">
             Details
           </Link>
-          <button onClick={handleAddToWishlist} className="btn btn-secondary">
-            Add to Wishlist
-          </button>
-          <button
-            onClick={handleAddToReadingList}
-            className="btn btn-secondary"
-          >
-            Add to Reading List
-          </button>
+          <div className="space-x-2">
+            <button
+              onClick={handleAddToWishlist}
+              className="btn btn-small text-xs border-none"
+            >
+              Add to Wishlist
+            </button>
+            <button
+              onClick={handleAddToReadingList}
+              className="btn btn-small text-xs border-none"
+            >
+              Add to Reading List
+            </button>
+          </div>
         </div>
       </div>
+      <Toaster position="top-center" />
     </div>
   );
 };
