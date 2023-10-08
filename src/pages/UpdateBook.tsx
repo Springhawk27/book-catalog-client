@@ -47,13 +47,15 @@ const UpdateBook = () => {
       const response = await updateBookMutation({ id, data: options });
       if ('error' in response) {
         setMessage('Failed to update the book. Please try again.');
-        setShowToast(true);
         setMessageCode(0);
+        setShowToast(true);
       } else {
         setMessage('Book updated successfully.');
-        setShowToast(true);
         setMessageCode(1);
+        setShowToast(true);
+
         navigate(`/book-detail/${id}`);
+        window.location.reload();
       }
     } catch (error) {
       setMessage('An error occurred. Please try again.');
@@ -62,7 +64,6 @@ const UpdateBook = () => {
     }
   };
 
-  // Set initial form values when book data is available
   useEffect(() => {
     if (book) {
       setValue('title', book.data.title);

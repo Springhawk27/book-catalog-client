@@ -118,7 +118,7 @@ export default function BookDetails() {
 
           <button className="btn btn-outline btn-primary me-2">
             {' '}
-            <Link to={`/updatebook/${book?.data?._id}`}>Edit</Link>
+            <Link to={`/updatebook/${book?.data?._id}`}>Edit this book</Link>
           </button>
           <button
             className="btn btn-outline btn-accent ms-2"
