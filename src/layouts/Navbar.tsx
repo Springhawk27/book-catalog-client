@@ -45,7 +45,7 @@ const Navbar = () => {
                   <Link to="/wishlist">Wish List</Link>
                 </li>
                 <li>
-                  <a>Reading List</a>
+                  <Link to="/readinglist">Reading List</Link>
                 </li>
                 {!user.email && (
                   <>
