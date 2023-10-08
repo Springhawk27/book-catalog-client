@@ -1,9 +1,13 @@
-import { usePostBookMutation } from '@/redux/features/books/bookApi';
+import {
+  useSingleBookQuery,
+  useUpdateBookMutation,
+} from '@/redux/features/books/bookApi';
 import { IBook } from '@/types/globalTypes';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useParams, useNavigate } from 'react-router-dom';
 
-interface IAddBook {
+interface IUpdateBook {
   title: string;
   author: string;
   genre: string;
@@ -11,20 +15,31 @@ interface IAddBook {
 }
 
 const UpdateBook = () => {
+  const { id } = useParams();
+
+  const {
+    data: book,
+    isLoading,
+    error: bookQueryError,
+  } = useSingleBookQuery(id);
+
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<IAddBook>();
+    setValue,
+  } = useForm<IUpdateBook>();
 
-  const [postBook] = usePostBookMutation();
+  const [updateBookMutation] = useUpdateBookMutation();
 
   const [showToast, setShowToast] = useState(false);
 
   const [message, setMessage] = useState<string | null>(null);
   const [messageCode, setMessageCode] = useState<number | null>(null);
 
-  const onSubmit = async (data: IAddBook) => {
+  const navigate = useNavigate();
+
+  const onSubmit = async (data: IUpdateBook) => {
     const options: IBook = {
       title: data.title,
       author: data.author,
@@ -33,15 +48,16 @@ const UpdateBook = () => {
     };
 
     try {
-      const response = await postBook(options);
+      const response = await updateBookMutation({ id, data: options });
       if ('error' in response) {
-        setMessage('Failed to create the book. Please try again.');
+        setMessage('Failed to update the book. Please try again.');
         setShowToast(true);
         setMessageCode(0);
       } else {
-        setMessage('Book created successfully.');
+        setMessage('Book updated successfully.');
         setShowToast(true);
         setMessageCode(1);
+        navigate(`/book-detail/${id}`);
       }
     } catch (error) {
       setMessage('An error occurred. Please try again.');
@@ -50,8 +66,17 @@ const UpdateBook = () => {
     }
   };
 
+  // Set initial form values when book data is available
   useEffect(() => {
-    console.log('showToast:', showToast);
+    if (book) {
+      setValue('title', book.data.title);
+      setValue('author', book.data.author);
+      setValue('genre', book.data.genre);
+      setValue('publicationDate', book.data.publicationDate.toString());
+    }
+  }, [book, setValue]);
+
+  useEffect(() => {
     if (showToast) {
       const timer = setTimeout(() => {
         setShowToast(false);
@@ -64,27 +89,23 @@ const UpdateBook = () => {
   return (
     <>
       {showToast && messageCode === 1 && (
-        <div
-          className={`toast toast-top toast-center bg-success rounded-md mt-4`}
-        >
-          <div className={`alert alert-success`}>
+        <div className="toast toast-top toast-center bg-success rounded-md mt-4">
+          <div className="alert alert-success">
             <span>{message}</span>
           </div>
         </div>
       )}
       {showToast && messageCode === 0 && (
-        <div
-          className={`toast toast-top toast-center bg-error rounded-md mt-4 text-white`}
-        >
-          <div className={`alert alert-error`}>
+        <div className="toast toast-top toast-center bg-error rounded-md mt-4 text-white">
+          <div className="alert alert-error">
             <span>{message}</span>
           </div>
         </div>
       )}
 
-      <div className="px-12 md:py-24 py-12 flex flex-col  justify-center items-center ">
-        <div className=" md:w-2/5 w-full">
-          <h3 className="flex justify-start underline">Add a new book</h3>
+      <div className="px-12 md:py-24 py-12 flex flex-col justify-center items-center">
+        <div className="md:w-2/5 w-full">
+          <h3 className="flex justify-start underline">Update Book</h3>
 
           <form
             onSubmit={handleSubmit(onSubmit)}
@@ -101,9 +122,10 @@ const UpdateBook = () => {
               autoComplete="title"
               autoCorrect="off"
               {...register('title', { required: 'Title is required' })}
-              className="input input-bordered w-full max-w-xs "
+              className="input input-bordered w-full max-w-xs"
             />
             {errors.title && <p>{errors.title.message}</p>}
+
             <label className="label">
               <span className="label-text">Author</span>
             </label>
@@ -117,6 +139,7 @@ const UpdateBook = () => {
               className="input input-bordered w-full max-w-xs"
             />
             {errors.author && <p>{errors.author.message}</p>}
+
             <label className="label">
               <span className="label-text">Genre</span>
             </label>
@@ -130,6 +153,7 @@ const UpdateBook = () => {
               className="input input-bordered w-full max-w-xs"
             />
             {errors.genre && <p>{errors.genre.message}</p>}
+
             <label className="label">
               <span className="label-text">Publication Date</span>
             </label>
@@ -145,8 +169,9 @@ const UpdateBook = () => {
               className="input input-bordered w-full max-w-xs"
             />
             {errors.publicationDate && <p>{errors.publicationDate.message}</p>}
+
             <button className="btn btn-outline btn-secondary mt-4">
-              Create Book
+              Update Book
             </button>
           </form>
         </div>

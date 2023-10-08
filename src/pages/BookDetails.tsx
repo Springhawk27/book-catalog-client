@@ -3,7 +3,7 @@ import {
   useDeleteBookMutation,
   useSingleBookQuery,
 } from '@/redux/features/books/bookApi';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 
 export default function BookDetails() {
   const { id } = useParams();
@@ -36,7 +36,10 @@ export default function BookDetails() {
             Publication Date: {book?.data?.publicationDate}
           </p>
 
-          <button className="btn btn-outline btn-primary me-2">Edit</button>
+          <button className="btn btn-outline btn-primary me-2">
+            {' '}
+            <Link to={`/updatebook/${book?.data?._id}`}>Edit</Link>
+          </button>
           <button
             className="btn btn-outline btn-accent ms-2"
             onClick={handleDelete}
