@@ -11,6 +11,12 @@ const bookApi = api.injectEndpoints({
     singleBook: builder.query({
       query: (id) => ({ url: `/books/${id}` }),
     }),
+    deleteBook: builder.mutation({
+      query: (id) => ({
+        url: `/books/${id}`,
+        method: 'DELETE',
+      }),
+    }),
     postBook: builder.mutation({
       query: (data) => ({
         url: `/books`,
@@ -43,4 +49,5 @@ export const {
   useSingleBookQuery,
   usePostReviewMutation,
   useGetReviewQuery,
+  useDeleteBookMutation,
 } = bookApi;

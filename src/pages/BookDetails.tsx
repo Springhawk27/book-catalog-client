@@ -1,13 +1,29 @@
 import BookReview from '@/components/BookReview';
-import { useSingleBookQuery } from '@/redux/features/books/bookApi';
-import { useParams } from 'react-router-dom';
+import {
+  useDeleteBookMutation,
+  useSingleBookQuery,
+} from '@/redux/features/books/bookApi';
+import { useNavigate, useParams } from 'react-router-dom';
 
 export default function BookDetails() {
   const { id } = useParams();
   console.log(id);
+  const navigate = useNavigate();
 
   const { data: book, isLoading, error } = useSingleBookQuery(id);
   console.log(book);
+
+  const [deleteBookMutation] = useDeleteBookMutation();
+
+  const handleDelete = async () => {
+    try {
+      await deleteBookMutation(id);
+
+      navigate('/books');
+    } catch (error) {
+      console.error('Error deleting book', error);
+    }
+  };
 
   return (
     <>
@@ -21,7 +37,12 @@ export default function BookDetails() {
           </p>
 
           <button className="btn btn-outline btn-primary me-2">Edit</button>
-          <button className="btn btn-outline btn-accent ms-2">Delete</button>
+          <button
+            className="btn btn-outline btn-accent ms-2"
+            onClick={handleDelete}
+          >
+            Delete
+          </button>
         </div>
       </div>
       <BookReview id={id!}></BookReview>
